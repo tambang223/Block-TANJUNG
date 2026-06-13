@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>LIVE DRAW GENERATOR</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:
+    radial-gradient(circle at top left,
+    #666 0%,
+    #333 40%,
+    #111 100%);
+
+    min-height:100vh;
+    padding:40px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+}
+
+.output{
+    width:100%;
+    min-height:180px;
+
+    background:rgba(0,0,0,.35);
+
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+
+    border:1px solid rgba(255,255,255,.1);
+
+    border-radius:12px;
+
+    color:white;
+    padding:25px;
+    font-size:18px;
+    font-weight:bold;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+
+    margin-bottom:30px;
+}
+
+.controls{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    width:250px;
+}
+
+select{
+    height:45px;
+    padding:0 10px;
+    font-size:16px;
+    border:none;
+}
+
+button{
+    height:45px;
+    border:none;
+    cursor:pointer;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.live{
+    background:#f0bc00;
+}
+
+.prediksi{
+    background:#0099e6;
+    color:white;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+.tanggal-box{
+    display:flex;
+    gap:8px;
+}
+
+.tanggal-box input{
+    height:45px;
+    border:none;
+    padding:0 10px;
+    font-size:16px;
+}
+
+#hari{
+    width:70px;
+}
+
+#bulan{
+    width:80px;
+    text-transform:uppercase;
+}
+
+#tahun{
+    width:90px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="output" id="hasil">
+        PILIH PASARAN
+    </div>
+
+    <div class="controls">
+      <div class="tanggal-box">
+
+    <input type="number" id="hari" value="13">
+
+    <input type="text" id="bulan" value="JUN">
+
+    <input type="number" id="tahun" value="2026">
+
+   </div>
+        <select id="pasaran">
+          
+            <option>KENTUCKY MID</option>
+            <option>ROMA</option>
+            <option>FLORIDA MID</option>
+            <option>MONACO</option>
+            <option>NEWYORK MID</option>
+            <option>TURIN</option>
+            <option>ITALY</option>
+            <option>CAROLINA DAY</option>
+            <option>CUBA</option>
+            <option>FRANCE</option>
+            <option>MADRID</option>
+            <option>OREGON 03</option>
+            <option>BULGARIA</option>
+            <option>HUNGARY</option>
+            <option>MIAMI</option>
+            <option>OREGON 06</option>
+            <option>CALIFORNIA</option>
+            <option>FLORIDA EVE</option>
+            <option>OREGON 09</option>
+            <option>NEWYORK EVE</option>
+            <option>KENTUCKY EVE</option>
+            <option>CAROLINA EVE</option>
+            <option>ECUADOR</option>
+            <option>AUSTRIA</option>
+            <option>CAMBODIA</option>
+            <option>FOSHAN</option>
+            <option>OREGON 12</option>
+            <option>CHILE</option>
+            <option>LAOS</option>
+            <option>BULLSEYE</option>
+            <option>TOTOMACAU 4D P1</option>
+            <option>SYDNEY</option>
+            <option>CHENGDU</option>
+            <option>GUANGDONG</option>
+            <option>TOTOMACAU 5D P1</option>
+            <option>CHINA</option>
+            <option>CHONGQING</option>
+            <option>TOTOMACAU 4D P2</option>
+            <option>PHILIPPINES</option>
+            <option>KINGKONG P1</option>
+            <option>JAPAN</option>
+            <option>KOWLOON</option>
+            <option>SINGAPORE</option>
+            <option>JEJU LOTTO</option>
+            <option>TOTO BEIJING</option>
+            <option>TOTOMACAU 4D P3</option>
+            <option>TOTO FUZHOU</option>
+            <option>CYPRUS</option>
+            <option>TAIWAN</option>
+            <option>TAICHUNG</option>
+            <option>MEXICO</option>
+            <option>TOTOMACAU 5D P2</option>
+            <option>ICELAND</option>
+            <option>OSLO</option>
+            <option>TOTOMACAU 4D P4</option>
+            <option>BHUTAN</option>
+            <option>HAITI</option>
+            <option>HONGKONG</option>
+            <option>TOTOMACAU 4D P5</option>
+            <option>KINGKONG P2</option>
+            <option>DENVER</option>
+            <option>TORONTO</option>
+            <option>TOTOMACAU 4D P6</option>
+        </select>
+
+        <button class="live" onclick="liveDraw()">
+            LIVEDRAW
+        </button>
+
+        <button class="prediksi" onclick="prediksi()">
+            PREDIKSI
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+const selectPasaran = document.getElementById("pasaran");
+const hasil = document.getElementById("hasil");
+
+const daftarPrediksi = [
+"KENTUCKY-MID",
+"ROMA",
+"FLORIDA-MID",
+"MONACO",
+"NEWYORK-MID",
+"TURIN",
+"ITALY",
+"CAROLINA-DAY",
+"CUBA",
+"FRANCE",
+"MADRID",
+"OREGON-03",
+"BULGARIA",
+"HUNGARY",
+"MIAMI",
+"OREGON-06",
+"CALIFORNIA",
+"FLORIDA-EVE",
+"OREGON-09",
+"NEWYORK-EVE",
+"KENTUCKY-EVE",
+"CAROLINA-EVE",
+"ECUADOR",
+"AUSTRIA",
+"CAMBODIA",
+"FOSHAN",
+"OREGON-12",
+"CHILE",
+"LAOS",
+"BULLSEYE",
+"TOTOMACAU-4D-P1",
+"SYDNEY",
+"CHENGDU",
+"GUANGDONG",
+"TOTOMACAU-5D-P1",
+"CHINA",
+"CHONGQING",
+"TOTOMACAU-4D-P2",
+"PHILIPPINES",
+"KINGKONG-P1",
+"JAPAN",
+"KOWLOON",
+"SINGAPORE",
+"JEJU LOTTO",
+"TOTO BEIJING",
+"TOTOMACAU-4D-P3",
+"TOTO FUZHOU",
+"CYPRUS",
+"TAIWAN",
+"TAICHUNG",
+"MEXICO",
+"TOTOMACAU-5D-P2",
+"ICELAND",
+"OSLO",
+"TOTOMACAU-4D-P4",
+"BHUTAN",
+"HAITI",
+"HONGKONG",
+"TOTOMACAU-4D-P5",
+"KINGKONG-P2",
+"DENVER",
+"TORONTO",
+"TOTOMACAU-4D-P6"
+];
+
+function getTanggalManual(){
+
+    const hari =
+    document.getElementById("hari").value;
+
+    const bulan =
+    document.getElementById("bulan").value.toUpperCase();
+
+    const tahun =
+    document.getElementById("tahun").value;
+
+    return `${hari} ${bulan} ${tahun}`;
+}
+
+function getTanggalPrediksi(){
+
+    const hari =
+    parseInt(document.getElementById("hari").value);
+
+    const bulan =
+    document.getElementById("bulan").value.toUpperCase();
+
+    const tahun =
+    document.getElementById("tahun").value;
+
+    return `${hari + 1} ${bulan} ${tahun}`;
+}
+
+function liveDraw(){
+
+    const index = selectPasaran.selectedIndex;
+    const pasaran = selectPasaran.options[index].text;
+
+const teks =
+`LIVE DRAW TOGEL ${pasaran} TANJUNGTOTO ${getTanggalManual()}`;
+
+hasil.innerHTML = teks;
+
+navigator.clipboard.writeText(teks);
+
+    let next = index + 1;
+
+    if(next >= selectPasaran.options.length){
+        next = 0;
+    }
+
+    selectPasaran.selectedIndex = next;
+}
+
+function prediksi(){
+
+    const index = selectPasaran.selectedIndex;
+
+    const pasaran = daftarPrediksi[index];
+
+    const teks =
+  `PREDIKSI TOGEL ${pasaran} ${getTanggalPrediksi()} TANJUNGTOTO`;
+
+    hasil.innerHTML = teks;
+
+    navigator.clipboard.writeText(teks);
+
+    let next = index + 1;
+
+    if(next >= selectPasaran.options.length){
+        next = 0;
+    }
+
+    selectPasaran.selectedIndex = next;
+}
+
+</script>
+
+</body>
+</html>
