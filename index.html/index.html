@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -57,6 +58,21 @@ body{
     margin-bottom:30px;
 }
 
+.animasi{
+    animation:muncul .4s ease;
+}
+
+@keyframes muncul{
+    0%{
+        opacity:0;
+        transform:scale(.9);
+    }
+    100%{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
 .controls{
     display:flex;
     flex-direction:column;
@@ -92,6 +108,22 @@ button:hover{
     opacity:.9;
 }
 
+.live,
+.prediksi{
+    transition:.2s;
+}
+
+@keyframes bounceBtn{
+    0%{transform:scale(1);}
+    30%{transform:scale(.85);}
+    60%{transform:scale(1.08);}
+    100%{transform:scale(1);}
+}
+
+.tekan{
+    animation:bounceBtn .35s;
+}
+
 .tanggal-box{
     display:flex;
     gap:8px;
@@ -115,6 +147,92 @@ button:hover{
 
 #tahun{
     width:90px;
+}
+
+.runner{
+    position:fixed;
+    bottom:40px;
+    left:-120px;
+    width:60px;
+    height:120px;
+    animation:lariCepat 1s linear infinite;
+}
+
+.head{
+    width:25px;
+    height:25px;
+    border-radius:50%;
+    background:white;
+    position:absolute;
+    left:24px;
+    top:2px;
+}
+
+.body{
+    width:4px;
+    height:40px;
+    background:white;
+    position:absolute;
+    top:25px;
+    left:28px;
+    transform:rotate(15deg);
+}
+
+.arm,
+.leg{
+    width:4px;
+    background:white;
+    position:absolute;
+    transform-origin:top center;
+}
+
+.arm{
+    height:38px;
+    top:28px;
+    left:28px;
+}
+
+.leg{
+    height:42px;
+    top:62px;
+    left:28px;
+}
+
+.arm1,
+.leg1{
+    animation:gerak1 .15s infinite alternate;
+}
+
+.arm2,
+.leg2{
+    animation:gerak2 .15s infinite alternate;
+}
+
+@keyframes gerak1{
+    from{
+        transform:rotate(-70deg);
+    }
+    to{
+        transform:rotate(70deg);
+    }
+}
+
+@keyframes gerak2{
+    from{
+        transform:rotate(70deg);
+    }
+    to{
+        transform:rotate(-70deg);
+    }
+}
+
+@keyframes lariCepat{
+    from{
+        left:-120px;
+    }
+    to{
+        left:110%;
+    }
 }
 
 </style>
@@ -204,13 +322,13 @@ button:hover{
             <option>TOTOMACAU 4D P6</option>
         </select>
 
-        <button class="live" onclick="liveDraw()">
-            LIVEDRAW
-        </button>
+<button class="live" onclick="animasiTombol(this);liveDraw()">
+    LIVEDRAW
+</button>
 
-        <button class="prediksi" onclick="prediksi()">
-            PREDIKSI
-        </button>
+<button class="prediksi" onclick="animasiTombol(this);prediksi()">
+    PREDIKSI
+</button>
 
     </div>
 
@@ -227,6 +345,19 @@ setTanggalOtomatis();
 
 const selectPasaran = document.getElementById("pasaran");
 const hasil = document.getElementById("hasil");
+function animasiHasil(teks){
+
+    hasil.classList.remove("animasi");
+
+    void hasil.offsetWidth;
+
+    hasil.innerHTML = teks;
+
+    hasil.classList.add("animasi");
+
+    navigator.clipboard.writeText(teks);
+}
+
 
 const daftarPrediksi = [
 "KENTUCKY-MID",
@@ -322,6 +453,15 @@ function getTanggalPrediksi(){
     return `${hari + 1} ${bulan} ${tahun}`;
 }
 
+function animasiTombol(btn){
+
+    btn.classList.remove("tekan");
+
+    void btn.offsetWidth;
+
+    btn.classList.add("tekan");
+}
+
 function liveDraw(){
 
     const index = selectPasaran.selectedIndex;
@@ -330,9 +470,7 @@ function liveDraw(){
 const teks =
 `LIVE DRAW TOGEL ${pasaran} TANJUNGTOTO ${getTanggalManual()}`;
 
-hasil.innerHTML = teks;
-
-navigator.clipboard.writeText(teks);
+animasiHasil(teks);
 
     let next = index + 1;
 
@@ -352,9 +490,7 @@ function prediksi(){
     const teks =
   `PREDIKSI TOGEL ${pasaran} ${getTanggalPrediksi()} TANJUNGTOTO`;
 
-    hasil.innerHTML = teks;
-
-    navigator.clipboard.writeText(teks);
+animasiHasil(teks);
 
     let next = index + 1;
 
@@ -366,6 +502,15 @@ function prediksi(){
 }
 
 </script>
+
+<div class="runner">
+    <div class="head"></div>
+    <div class="body"></div>
+    <div class="arm arm1"></div>
+    <div class="arm arm2"></div>
+    <div class="leg leg1"></div>
+    <div class="leg leg2"></div>
+</div>
 
 </body>
 </html>
