@@ -130,7 +130,7 @@ button:hover{
     <div class="controls">
       <div class="tanggal-box">
 
-    <input type="number" id="hari" value="13">
+    <input type="number" id="hari">
 
     <input type="text" id="bulan" value="JUN">
 
@@ -217,6 +217,13 @@ button:hover{
 </div>
 
 <script>
+
+function setTanggalOtomatis() {
+    document.getElementById("hari").value =
+        new Date().getDate();
+}
+
+setTanggalOtomatis();
 
 const selectPasaran = document.getElementById("pasaran");
 const hasil = document.getElementById("hasil");
